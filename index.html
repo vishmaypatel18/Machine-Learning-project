@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spam Detector | ML Mini Project</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="page">
+    <div class="tag">MACHINE LEARNING MINI PROJECT</div>
+    <h1>Spam <span>Detector</span></h1>
+    <p class="subtitle">Paste a text message below and let the model check it.</p>
+
+    <section class="panel">
+      <form method="POST">
+        <label for="message">Your message</label>
+        <textarea id="message" name="message" rows="5" maxlength="2000"
+          placeholder="Example: Congratulations! You won a free prize..." required>{{ message }}</textarea>
+        <div class="hint">Tip: Try a normal message and a suspicious offer.</div>
+        <button type="submit">Check message <span aria-hidden="true">→</span></button>
+      </form>
+
+      {% if result %}
+      <div class="result {{ result }}" role="status">
+        <div class="result-icon">{% if result == 'spam' %}⚠{% else %}✓{% endif %}</div>
+        <div>
+          <div class="result-title">
+            {% if result == 'spam' %}Likely Spam{% else %}Likely Not Spam{% endif %}
+          </div>
+          <p>Model confidence: {{ confidence }}%</p>
+        </div>
+      </div>
+      <p class="disclaimer">This is a beginner demo trained on a small sample dataset. Predictions can be wrong.</p>
+      {% endif %}
+    </section>
+
+    <section class="examples">
+      <h2>Try an example</h2>
+      <div class="example-list">
+        <button type="button" class="example" data-message="Congratulations! You have won a free cash prize. Click now!">Suspicious offer</button>
+        <button type="button" class="example" data-message="Hey, are we still meeting after class today?">Normal message</button>
+      </div>
+    </section>
+    <footer>Built with Python · Flask · pandas · scikit-learn</footer>
+  </main>
+  <script>
+    document.querySelectorAll(".example").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelector("#message").value = button.dataset.message;
+        document.querySelector("#message").focus();
+      });
+    });
+  </script>
+</body>
+</html>
